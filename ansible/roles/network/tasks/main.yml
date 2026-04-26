@@ -1,0 +1,16 @@
+---
+- name: Configure static IP via Netplan
+  copy:
+    dest: /etc/netplan/10-static.yaml
+    content: |
+      network:
+        version: 2
+        ethernets:
+          enp0s1:
+            dhcp4: true
+            addresses:
+              - {{ ip_address }}/24
+    owner: root
+    group: root
+    mode: '0600'
+  notify: apply netplan

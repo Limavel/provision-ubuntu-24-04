@@ -1,0 +1,38 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install common packages
+  apt:
+    name:
+      - curl
+      - wget
+      - git
+      - unzip
+      - zip
+      - tmux
+      - vim
+      - htop
+      - net-tools
+      - apt-transport-https
+      - ca-certificates
+      - gnupg2
+      - lsb-release
+      - acl
+    state: present
+
+- name: Check if inotify max user watches is already configured
+  command: sysctl -n fs.inotify.max_user_watches
+  register: inotify_watches
+  changed_when: false
+
+- name: Increase inotify max user watches
+  ansible.posix.sysctl:
+    name: fs.inotify.max_user_watches
+    value: '524288'
+    sysctl_set: true
+    state: present
+    reload: true
+  when: inotify_watches.stdout | int < 524288

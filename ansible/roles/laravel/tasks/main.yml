@@ -1,0 +1,17 @@
+---
+- name: Install Laravel installer
+  become_user: limavel
+  command: composer global require laravel/installer
+  args:
+    creates: /home/limavel/.config/composer/vendor/bin/laravel
+
+- name: Add Composer global bin to PATH in shell configs
+  become_user: limavel
+  lineinfile:
+    path: "{{ item }}"
+    regexp: '^export PATH=.*\.config/composer/vendor/bin'
+    line: 'export PATH="$HOME/.config/composer/vendor/bin:$PATH"'
+    create: yes
+  loop:
+    - /home/limavel/.bashrc
+    - /home/limavel/.zshrc

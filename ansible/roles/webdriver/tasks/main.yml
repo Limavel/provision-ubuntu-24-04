@@ -1,0 +1,25 @@
+---
+- name: Ensure snapd is installed
+  apt:
+    name: snapd
+    state: present
+
+- name: Install Chromium via snap
+  command: snap install chromium
+  args:
+    creates: /snap/bin/chromium
+  ignore_errors: yes
+
+- name: Create chromium symlink for compatibility
+  file:
+    src: /snap/bin/chromium
+    dest: /usr/local/bin/chromium
+    state: link
+  ignore_errors: yes
+
+- name: Create chromedriver symlink for compatibility
+  file:
+    src: /snap/bin/chromium.chromedriver
+    dest: /usr/local/bin/chromedriver
+    state: link
+  ignore_errors: yes

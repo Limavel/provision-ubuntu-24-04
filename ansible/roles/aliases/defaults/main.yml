@@ -1,0 +1,6 @@
+---
+aliases:
+  - name: a
+    command: "artisan"
+  - name: l
+    command: "ls -l"

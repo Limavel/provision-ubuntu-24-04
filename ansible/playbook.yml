@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+  vars_files:
+    - vars.yml
+  roles:
+    - common
+    - php
+    - nginx
+    - composer
+    - nodejs
+    - role: mariadb
+      when: "db_type == 'mariadb'"
+    - role: mysql
+      when: "db_type == 'mysql'"
+    - role: postgresql
+      when: "db_type == 'postgresql'"
+    - databases
+    - role: ohmyzsh
+      when: "features.ohmyzsh | default(false)"
+    - role: mailpit
+      when: "features.mailpit | default(false)"
+    - role: mongodb
+      when: "features.mongodb | default(false)"
+    - role: webdriver
+      when: "features.webdriver | default(false)"
+    - role: valkey
+      when: "features.valkey | default(false)"
+    - aliases
+    - motd
+    - laravel
